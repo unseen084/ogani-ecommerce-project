@@ -657,7 +657,7 @@
                             <ul>
                                 <li><i class="fa fa-calendar-o"></i> {{ blog.published|date:'F jS Y' }}</li>
                             </ul>
-                            <h5><a href="#">{{ blog.title }}</a></h5>
+                            <h5><a href="{% url 'blog:detail' blog.id %}">{{ blog.title }}</a></h5>
                             <p>{{ blog.description|striptags|truncatechars:250}} </p>
                         </div>
                     </div>

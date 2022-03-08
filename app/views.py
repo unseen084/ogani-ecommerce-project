@@ -10,3 +10,4 @@ def home(request):
 def blog(request):
     blogs = Blog.objects.all()
     return render(request, 'blog/blog.html', {'blogs': blogs})
+
