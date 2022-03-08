@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from blog.models import Blog
 
@@ -10,4 +11,9 @@ def home(request):
 def blog(request):
     blogs = Blog.objects.all()
     return render(request, 'blog/blog.html', {'blogs': blogs})
+
+
+def contact(request):
+    return render(request, 'app/contact.html')
+
 
