@@ -1,6 +1,7 @@
 {% extends "app/base.html" %}
 
 {% load static %}
+{% load mathfilters %}
 
 {% block content %}
 
@@ -220,7 +221,7 @@
                                             <div class="product__discount__item">
                                                 <div class="product__discount__item__pic set-bg"
                                                     data-setbg="{{ product.image.url }}">
-                                                    <div class="product__discount__percent">-20%</div>
+                                                    <div class="product__discount__percent">{{ product.discounted_price|mul:100|div:product.price|sub:100}}%</div>
                                                     <ul class="product__item__pic__hover">
                                                         <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                                         <li><a href="#"><i class="fa fa-retweet"></i></a></li>
@@ -228,7 +229,7 @@
                                                     </ul>
                                                 </div>
                                                 <div class="product__discount__item__text">
-                                                    <span>{{ product.category }} </span>
+                                                    <span>{{ product.get.category.display }} </span>
                                                     <h5><a href="#"> {{ product.title }} </a></h5>
                                                     <div class="product__item__price">{{ product.discounted_price }} <span>{{ product.price }}</span></div>
                                                 </div>
@@ -275,7 +276,7 @@
                                     </ul>
                                 </div>
                                 <div class="product__item__text">
-                                    <h6><a href="#">{{ product.title }}</a></h6>
+                                    <h6><a href="{% url 'shop:productinfo' product.id %}">{{ product.title }}</a></h6>
                                     <h5>{{ product.price }} BDT</h5>
                                 </div>
                             </div>
