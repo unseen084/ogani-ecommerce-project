@@ -21,8 +21,8 @@ class Product(models.Model):
     title = models.CharField(max_length=200)
     image = models.ImageField(upload_to="app/images/")
     price = models.FloatField()
-    discounted_price = models.FloatField()
-    fav_count = models.IntegerField()
+    discounted_price = models.FloatField(null=True, blank=True)
+    fav_count = models.IntegerField(null=True, blank=True)
     latest = models.DateField()
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=3)
 

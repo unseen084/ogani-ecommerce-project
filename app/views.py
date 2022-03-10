@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from blog.models import Blog
+from shop.models import Product
 
 
 def home(request):
@@ -15,5 +16,10 @@ def blog(request):
 
 def contact(request):
     return render(request, 'app/contact.html')
+
+
+def shop(request):
+    products = Product.objects.all()
+    return render(request, 'shop/shop-grid.html', {'products': products})
 
 
