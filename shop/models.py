@@ -19,7 +19,16 @@ CATEGORY_CHOICES = (
 
 class Product(models.Model):
     title = models.CharField(max_length=200)
-    image = models.ImageField(upload_to="app/images/")
+
+    image1 = models.ImageField(upload_to="app/images/")
+    image2 = models.ImageField(upload_to="app/images/", null=True, blank=True)
+    image3 = models.ImageField(upload_to="app/images/", null=True, blank=True)
+    image4 = models.ImageField(upload_to="app/images/", null=True, blank=True)
+    image5 = models.ImageField(upload_to="app/images/", null=True, blank=True)
+
+    shortinfo = models.TextField(default='NA')
+    description = models.TextField(default='NA')
+    weight = models.FloatField(default=0.0)
     price = models.FloatField()
     discounted_price = models.FloatField(null=True, blank=True)
     fav_count = models.IntegerField(null=True, blank=True)
