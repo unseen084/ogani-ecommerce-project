@@ -55,9 +55,16 @@
                     <li><a href="#">English</a></li>
                 </ul>
             </div>
+            {% if request.user.is_authenticated %}
             <div class="header__top__right__auth">
-                <a href="#"><i class="fa fa-user"></i> Login</a>
+                <a href="{% url 'app:signup' %}"><i class="fa fa-user"></i> Logout</a>
             </div>
+            {% else %}
+            <div class="header__top__right__auth">
+                <a href="#"><i class="fa fa-user"></i> Signup/Login</a>
+            </div>
+            {% endif %}
+
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
@@ -121,9 +128,15 @@
                                     <li><a href="#">English</a></li>
                                 </ul>
                             </div>
+                            {% if request.user.is_authenticated %}
                             <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Login</a>
+                                <a href="{% url 'app:signup' %}"><i class="fa fa-user"></i> Logout</a>
                             </div>
+                            {% else %}
+                            <div class="header__top__right__auth">
+                                <a href="#"><i class="fa fa-user"></i> Signup/Login</a>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

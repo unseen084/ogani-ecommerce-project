@@ -18,6 +18,10 @@ def contact(request):
     return render(request, 'app/contact.html')
 
 
+def signup(request):
+    return render(request, 'app/signup.html')
+
+
 def shop(request):
     products = Product.objects.all()
     return render(request, 'shop/shop-grid.html', {'products': products})
