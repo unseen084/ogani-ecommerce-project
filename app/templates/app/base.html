@@ -57,11 +57,11 @@
             </div>
             {% if request.user.is_authenticated %}
             <div class="header__top__right__auth">
-                <a href="{% url 'app:signup' %}"><i class="fa fa-user"></i> Logout</a>
+                <small><a href=""><i class="fa fa-user"></i> {{ user.username }} |</a><a href=""> Logout</a></small>
             </div>
             {% else %}
             <div class="header__top__right__auth">
-                <a href="#"><i class="fa fa-user"></i> Signup/Login</a>
+                <a href="{% url 'app:signup' %}"><i class="fa fa-user"></i> Signup/Login</a>
             </div>
             {% endif %}
 
@@ -130,7 +130,7 @@
                             </div>
                             {% if request.user.is_authenticated %}
                             <div class="header__top__right__auth">
-                                <a href="{% url 'app:signup' %}"><i class="fa fa-user"></i> Logout</a>
+                                <small><a href=""><i class="fa fa-user"></i> {{ user.username }} |</a><a href=""> Logout</a></small>
                             </div>
                             {% else %}
                             <div class="header__top__right__auth">

@@ -29,6 +29,10 @@ def contact(request):
     return render(request, 'app/contact.html')
 
 
+def loginuser(request):
+    return render(request, 'app/login.html')
+
+
 class CustomerRegistrationView(View):
     def get(self, request):
         form = CustomerRegistrationForm()
