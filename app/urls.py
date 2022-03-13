@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from django.contrib.auth import views as auth_views
-from .forms import LoginForm
+from .forms import LoginForm, MyPasswordResetForm, MySetPasswordForm
 
 from django.contrib.auth.models import User
 
@@ -16,5 +16,5 @@ urlpatterns = [
     # path('login/', views.loginuser, name='loginuser'),
     path('accounts/login/', auth_views.LoginView.as_view(template_name='app/login.html',
                                                          authentication_form=LoginForm), name='loginuser'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='app:loginuser'), name='logoutuser')
+    path('logout/', auth_views.LogoutView.as_view(next_page='app:loginuser'), name='logoutuser'),
 ]
