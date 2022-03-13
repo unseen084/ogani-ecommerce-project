@@ -40,6 +40,7 @@ class CustomerRegistrationView(View):
             obj = form.save()
             obj.user = request.user
             obj.save()
+            login(request, obj)
             return redirect('app:home')
         return render(request, 'app/signup.html', {'form': form})
 
