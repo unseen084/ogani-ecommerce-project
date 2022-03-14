@@ -92,16 +92,17 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% for cart in carts %}
                                 <tr>
                                     <td class="shoping__cart__item">
-                                        <img src="{{ product.image1.url }}" alt="">
-                                        <h5>{{ product.title }}</h5>
+                                        <img src="{{ cart.product.image1.url }}" alt="">
+                                        <h5>{{ cart.product.title }}</h5>
                                     </td>
                                     <td class="shoping__cart__price">
-                                        {% if product.discounted_price is not none %}
-                                        {{ product.discounted_price }}BDT
+                                        {% if cart.product.discounted_price is not none %}
+                                        {{ cart.product.discounted_price }}BDT
                                         {% else %}
-                                        {{ product.price }}BDT
+                                        {{ cart.product.price }}BDT
                                         {% endif %}
                                     </td>
                                     <td class="shoping__cart__quantity">
@@ -118,6 +119,7 @@
                                         <span class="icon_close"></span>
                                     </td>
                                 </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
