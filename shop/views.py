@@ -34,7 +34,8 @@ def show_cart(request):
                     tempamount = (p.quantity * p.product.price)
                 amount += tempamount
             total_amount = amount + shipping_amount
-        return render(request, 'shop/shopping-cart.html', {'carts': cart,
+            return render(request, 'shop/shopping-cart.html', {'carts': cart,
                                                            'totalamount': total_amount,
                                                            'amount': amount})
-
+        else:
+            return render(request, 'app/emptycart.html')
