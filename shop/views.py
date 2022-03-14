@@ -20,5 +20,21 @@ def add_to_cart(request, product_id):
 def show_cart(request):
     if request.user.is_authenticated:
         cart = Cart.objects.filter(user=request.user)
-        return render(request, 'shop/shopping-cart.html', {'carts': cart})
+        amount = 0.0
+        shipping_amount = 80.0
+        total_amount = 0.0
+        cart_product = list(cart)
+        print(cart_product)
+        if cart_product:
+            for p in cart_product:
+                print(p.quantity, "*", p.product.discounted_price)
+                if p.product.discounted_price is not None:
+                    tempamount = (p.quantity * p.product.discounted_price)
+                else:
+                    tempamount = (p.quantity * p.product.price)
+                amount += tempamount
+            total_amount = amount + shipping_amount
+        return render(request, 'shop/shopping-cart.html', {'carts': cart,
+                                                           'totalamount': total_amount,
+                                                           'amount': amount})
 
