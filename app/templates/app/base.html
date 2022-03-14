@@ -57,7 +57,7 @@
             </div>
             {% if request.user.is_authenticated %}
             <div class="header__top__right__auth">
-                <small><a href=""><i class="fa fa-user"></i> {{ user.username }}</a><a href="{% url 'app:logoutuser' %}"> Logout</a></small>
+                <small><a href="{% url 'app:userProfile' %}"><i class="fa fa-user"></i> {{ user.username }}</a><a href="{% url 'app:logoutuser' %}"> Logout</a></small>
             </div>
             {% else %}
             <div class="header__top__right__auth">
@@ -130,7 +130,7 @@
                             </div>
                             {% if request.user.is_authenticated %}
                             <div class="header__top__right__auth">
-                                <small><a href=""><i class="fa fa-user"></i> {{ user.username }}</a><a href="{% url 'app:logoutuser' %}"> Logout</a></small>
+                                <small><a href="{% url 'app:userProfile' %}"><i class="fa fa-user"></i> {{ user.username }}</a><a href="{% url 'app:logoutuser' %}"> Logout</a></small>
                             </div>
                             {% else %}
                             <div class="header__top__right__auth">
