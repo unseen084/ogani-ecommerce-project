@@ -93,32 +93,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for cart in carts %}
+                                {% for item in items %}
                                 <tr>
                                     <td class="shoping__cart__item">
-                                        <img src="{{ cart.product.image1.url }}" alt="">
-                                        <h5>{{ cart.product.title }}</h5>
+                                        <img src="{{ item.product.image1.url }}" alt="">
+                                        <h5>{{ item.product.title }}</h5>
                                     </td>
                                     <td class="shoping__cart__price">
-                                        {% if cart.product.discounted_price is not none %}
-                                        {{ cart.product.discounted_price }}BDT
+                                        {% if item.product.discounted_price is not none %}
+                                        {{ item.product.discounted_price }}BDT
                                         {% else %}
-                                        {{ cart.product.price }}BDT
+                                        {{ item.product.price }}BDT
                                         {% endif %}
                                     </td>
                                     <td class="shoping__cart__quantity">
                                         <div class="quantity">
                                             <div class="pro-qty">
-                                                <input type="text" value="1">
+                                                <input type="text" value="{{ item.quantity }}">
                                             </div>
                                         </div>
                                     </td>
                                     <td class="shoping__cart__total">
-                                        {% if cart.product.discounted_price is not none %}
-                                        {{ cart.product.discounted_price|mul:cart.quantity }}BDT
-                                        {% else %}
-                                        {{ cart.product.price|mul:cart.quantity }}BDT
-                                        {% endif %}
+                                        {{ item.get_total }}
                                     </td>
                                     <td class="shoping__cart__item__close">
                                         <span class="icon_close"></span>
@@ -153,9 +149,9 @@
                     <div class="shoping__checkout">
                         <h5>Cart Total</h5>
                         <ul>
-                            <li>Subtotal <span>{{ amount }} BDT</span></li>
+                            <li>Subtotal <span>{{ order.get_cart_total.0 }} BDT</span></li>
                             <li>Shipping <span>70.00 BDT</span></li>
-                            <li>Total <span>{{ totalamount }} BDT</span></li>
+                            <li>Total <span>{{ order.get_cart_total.1 }} BDT</span></li>
                         </ul>
                         <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
                     </div>

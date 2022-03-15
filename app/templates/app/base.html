@@ -41,7 +41,7 @@
         <div class="humberger__menu__cart">
             <ul>
                 <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                <li><a href="{% url 'shop:show_cart' %}"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                <li><a href="{% url 'shop:cart' %}"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
             </ul>
             <div class="header__cart__price">item: <span>$150.00</span></div>
         </div>
@@ -57,7 +57,7 @@
             </div>
             {% if request.user.is_authenticated %}
             <div class="header__top__right__auth">
-                <small><a href="{% url 'app:userProfile' %}"><i class="fa fa-user"></i> {{ user.username }}</a><a href="{% url 'app:logoutuser' %}"> Logout</a></small>
+                <small><a href="{% url 'app:userprofile' %}"><i class="fa fa-user"></i> {{ user.username }}</a><a href="{% url 'app:logoutuser' %}"> Logout</a></small>
             </div>
             {% else %}
             <div class="header__top__right__auth">
@@ -130,7 +130,7 @@
                             </div>
                             {% if request.user.is_authenticated %}
                             <div class="header__top__right__auth">
-                                <small><a href="{% url 'app:userProfile' %}"><i class="fa fa-user"></i> {{ user.username }}</a><a href="{% url 'app:logoutuser' %}"> Logout</a></small>
+                                <small><a href="{% url 'app:userprofile' %}"><i class="fa fa-user"></i> {{ user.username }}</a><a href="{% url 'app:logoutuser' %}"> Logout</a></small>
                             </div>
                             {% else %}
                             <div class="header__top__right__auth">
@@ -171,7 +171,7 @@
                     <div class="header__cart">
                         <ul>
                             <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="{% url 'shop:show_cart' %}"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            <li><a href="{% url 'shop:cart' %}"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
                         </ul>
                         <div class="header__cart__price">item: <span>$150.00</span></div>
                     </div>
