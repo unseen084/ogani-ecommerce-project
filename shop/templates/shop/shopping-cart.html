@@ -101,9 +101,9 @@
                                     </td>
                                     <td class="shoping__cart__price">
                                         {% if item.product.discounted_price is not none %}
-                                        {{ item.product.discounted_price }}BDT
+                                        {{ item.product.discounted_price|floatformat:2 }}BDT
                                         {% else %}
-                                        {{ item.product.price }}BDT
+                                        {{ item.product.price|floatformat:2 }}BDT
                                         {% endif %}
                                     </td>
                                     <td class="shoping__cart__quantity">
@@ -149,11 +149,11 @@
                     <div class="shoping__checkout">
                         <h5>Cart Total</h5>
                         <ul>
-                            <li>Subtotal <span>{{ order.get_cart_total.0 }} BDT</span></li>
+                            <li>Subtotal <span>{{ order.get_cart_total.0|floatformat:2 }} BDT</span></li>
                             <li>Shipping <span>70.00 BDT</span></li>
-                            <li>Total <span>{{ order.get_cart_total.1 }} BDT</span></li>
+                            <li>Total <span>{{ order.get_cart_total.1|floatformat:2 }} BDT</span></li>
                         </ul>
-                        <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
+                        <a href="{% url 'shop:checkout' %}" class="primary-btn">PROCEED TO CHECKOUT</a>
                     </div>
                 </div>
             </div>
