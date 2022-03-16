@@ -30,27 +30,30 @@ def contact(request):
 
 
 def userprofile(request):
-    #Have to change when db is made
+    # Have to change when db is made
+    customer = Customer.objects.get(user_id=request.user.id)
+    shipping_address = ShippingAddress.objects.get(customer_id=customer.id, order_id=None)
+
     initial_data = {  # 1st Method
         'first_name': request.user.first_name,
         'last_name': request.user.last_name,
-        'country': "dhgfdfrhh",
-        'address': "fdhgffdh",
-        'city': "hgfdhgf",
-        'postal_code': "hggerhy",
-        'phone_number': "gedhtfdh",
+        'country': shipping_address.country,
+        'address': shipping_address.address,
+        'city': shipping_address.city,
+        'postal_code': shipping_address.postal_code,
+        'phone_number': shipping_address.phone_number,
         'email': request.user.email,
     }
 
-    if request.method=='POST':
+    if request.method == 'POST':
         form = ProfileEditForm(request.POST or None)
         if form.is_valid():
             form.save()
-            #Some_TOdo_code_here
+            # Some_TOdo_code_here
             return render(request, 'app/user_profile.html', {'form': form})
     else:
         form = ProfileEditForm(initial=initial_data)
-        #redirect(Signup_teacher_r)
+        # redirect(Signup_teacher_r)
     return render(request, 'app/user_profile.html', {'form': form})
 
 
@@ -69,7 +72,7 @@ class CustomerRegistrationView(View):
 
             c.user = User.objects.get(id=obj.id)
             c.email = form.cleaned_data['email']
-            c.name = form.cleaned_data['first_name']+' '+form.cleaned_data['last_name']
+            c.name = form.cleaned_data['first_name'] + ' ' + form.cleaned_data['last_name']
             c.save()
 
             shipping = ShippingAddress()
@@ -84,8 +87,3 @@ class CustomerRegistrationView(View):
             login(request, obj)
             return redirect('app:home')
         return render(request, 'app/signup.html', {'form': form})
-
-
-
-
-
