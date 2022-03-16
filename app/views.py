@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 
 from blog.models import Blog
-from shop.models import Product
+from shop.models import Product, Customer, ShippingAddress
 
 from .forms import CustomerRegistrationForm, ProfileEditForm
 
@@ -61,10 +61,26 @@ class CustomerRegistrationView(View):
 
     def post(self, request):
         form = CustomerRegistrationForm(request.POST)
+        c = Customer()
         if form.is_valid():
             obj = form.save()
             obj.user = request.user
             obj.save()
+
+            c.user = User.objects.get(id=obj.id)
+            c.email = form.cleaned_data['email']
+            c.name = form.cleaned_data['first_name']+' '+form.cleaned_data['last_name']
+            c.save()
+
+            shipping = ShippingAddress()
+            shipping.customer = c
+            shipping.address = form.cleaned_data['address']
+            shipping.country = form.cleaned_data['country']
+            shipping.city = form.cleaned_data['city']
+            shipping.postal_code = form.cleaned_data['postal_code']
+            shipping.phone_number = form.cleaned_data['phone_number']
+            shipping.save()
+
             login(request, obj)
             return redirect('app:home')
         return render(request, 'app/signup.html', {'form': form})
