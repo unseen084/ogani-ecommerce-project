@@ -4,7 +4,6 @@
 {% load mathfilters %}
 
 {% block content %}
-
     <!-- Hero Section Begin -->
     <section class="hero hero-normal">
         <div class="container">
@@ -96,7 +95,7 @@
                                 {% for item in items %}
                                 <tr>
                                     <td class="shoping__cart__item">
-                                        <img src="{{ item.product.image1.url }}" alt="">
+                                        <img src="{{ item.product.image1.url }}" alt="" height="200" width="200">
                                         <h5>{{ item.product.title }}</h5>
                                     </td>
                                     <td class="shoping__cart__price">
@@ -108,8 +107,10 @@
                                     </td>
                                     <td class="shoping__cart__quantity">
                                         <div class="quantity">
-                                            <div class="pro-qty">
+                                            <div class="pro-qty" style="text-align: center;">
+                                                <span class="dec qtybtn update-cart" data-product="{{ item.product.id }}" data-action="remove">-</span>
                                                 <input type="text" value="{{ item.quantity }}">
+                                                <span class="inc qtybtn update-cart" data-product="{{ item.product.id }}" data-action="add">+</span>
                                             </div>
                                         </div>
                                     </td>

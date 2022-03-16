@@ -13,8 +13,7 @@ for(var i=0;i<updateBtns.length;i++){
 }
 
 function updateUserOrder(productId, action){
-    var url = 'update_item/'
-
+    var url = 'http://127.0.0.1:8000/shop/update_item/'
     fetch(url, {
         method:'POST',
         headers:{
