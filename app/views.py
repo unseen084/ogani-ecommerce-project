@@ -80,12 +80,11 @@ def userprofile(request):
                 postal_code = form.cleaned_data['postal_code'],
                 phone_number = form.cleaned_data['phone_number']
             )
-
             return render(request, 'app/user_profile.html', {'form': form})
     else:
         initial_data = prepareInitialData(request)
         form = ProfileEditForm(initial=initial_data)
-        #redirect(Signup_teacher_r)
+        # redirect(Signup_teacher_r)
     return render(request, 'app/user_profile.html', {'form': form})
 
 
@@ -104,7 +103,7 @@ class CustomerRegistrationView(View):
 
             c.user = User.objects.get(id=obj.id)
             c.email = form.cleaned_data['email']
-            c.name = form.cleaned_data['first_name']+' '+form.cleaned_data['last_name']
+            c.name = form.cleaned_data['first_name'] + ' ' + form.cleaned_data['last_name']
             c.save()
 
             shipping = ShippingAddress()
@@ -119,8 +118,3 @@ class CustomerRegistrationView(View):
             login(request, obj)
             return redirect('app:home')
         return render(request, 'app/signup.html', {'form': form})
-
-
-
-
-
