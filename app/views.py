@@ -29,26 +29,61 @@ def contact(request):
     return render(request, 'app/contact.html')
 
 
-def userprofile(request):
-    #Have to change when db is made
+def prepareInitialData(request):
+    customer = Customer.objects.get(user_id=request.user.id)
+    shipping_address = ShippingAddress.objects.get(customer_id=customer.id, order_id=None)
+
     initial_data = {  # 1st Method
         'first_name': request.user.first_name,
         'last_name': request.user.last_name,
-        'country': "dhgfdfrhh",
-        'address': "fdhgffdh",
-        'city': "hgfdhgf",
-        'postal_code': "hggerhy",
-        'phone_number': "gedhtfdh",
+        'country': shipping_address.country,
+        'address': shipping_address.address,
+        'city': shipping_address.city,
+        'postal_code': shipping_address.postal_code,
+        'phone_number': shipping_address.phone_number,
         'email': request.user.email,
     }
+    return initial_data
 
+def userprofile(request):
     if request.method=='POST':
         form = ProfileEditForm(request.POST or None)
         if form.is_valid():
-            form.save()
-            #Some_TOdo_code_here
+
+            #form.save()
+
+            # c = Customer()
+            # c.user = User.objects.get(pk=request.user.id)
+            # c.email = form.cleaned_data['email']
+            # c.name = form.cleaned_data['first_name'] + ' ' + form.cleaned_data['last_name']
+            # c.save()
+
+            Customer.objects.filter(user=request.user).update(email=form.cleaned_data['email'],
+                                                              name=form.cleaned_data['first_name'] + ' ' + form.cleaned_data['last_name'])
+
+            # shipping = ShippingAddress()
+            # shipping.customer = c
+            # shipping.address = form.cleaned_data['address']
+            # shipping.country = form.cleaned_data['country']
+            # shipping.city = form.cleaned_data['city']
+            # shipping.postal_code = form.cleaned_data['postal_code']
+            # shipping.phone_number = form.cleaned_data['phone_number']
+            #shipping.save()
+            customer = Customer.objects.filter(user=request.user)
+            customer = customer[0]
+
+            ShippingAddress.objects.filter(
+                customer=customer).update(
+                address=form.cleaned_data['address'],
+                country=form.cleaned_data['country'],
+                city = form.cleaned_data['city'],
+                postal_code = form.cleaned_data['postal_code'],
+                phone_number = form.cleaned_data['phone_number']
+            )
+
             return render(request, 'app/user_profile.html', {'form': form})
     else:
+        initial_data = prepareInitialData(request)
         form = ProfileEditForm(initial=initial_data)
         #redirect(Signup_teacher_r)
     return render(request, 'app/user_profile.html', {'form': form})
