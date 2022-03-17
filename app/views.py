@@ -30,12 +30,13 @@ def contact(request):
 
 
 def prepareInitialData(request):
+    user = User.objects.get(id=request.user.id)
     customer = Customer.objects.get(user_id=request.user.id)
     shipping_address = ShippingAddress.objects.get(customer_id=customer.id, order_id=None)
 
     initial_data = {  # 1st Method
-        'first_name': request.user.first_name,
-        'last_name': request.user.last_name,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
         'country': shipping_address.country,
         'address': shipping_address.address,
         'city': shipping_address.city,
@@ -49,26 +50,12 @@ def userprofile(request):
     if request.method=='POST':
         form = ProfileEditForm(request.POST or None)
         if form.is_valid():
-
-            #form.save()
-
-            # c = Customer()
-            # c.user = User.objects.get(pk=request.user.id)
-            # c.email = form.cleaned_data['email']
-            # c.name = form.cleaned_data['first_name'] + ' ' + form.cleaned_data['last_name']
-            # c.save()
-
+            User.objects.filter(id=request.user.id).update(
+                first_name=form.cleaned_data['first_name'],
+                last_name=form.cleaned_data['last_name']
+            )
             Customer.objects.filter(user=request.user).update(email=form.cleaned_data['email'],
                                                               name=form.cleaned_data['first_name'] + ' ' + form.cleaned_data['last_name'])
-
-            # shipping = ShippingAddress()
-            # shipping.customer = c
-            # shipping.address = form.cleaned_data['address']
-            # shipping.country = form.cleaned_data['country']
-            # shipping.city = form.cleaned_data['city']
-            # shipping.postal_code = form.cleaned_data['postal_code']
-            # shipping.phone_number = form.cleaned_data['phone_number']
-            #shipping.save()
             customer = Customer.objects.filter(user=request.user)
             customer = customer[0]
 
@@ -80,12 +67,14 @@ def userprofile(request):
                 postal_code = form.cleaned_data['postal_code'],
                 phone_number = form.cleaned_data['phone_number']
             )
+            initial_data = prepareInitialData(request)
+            form = ProfileEditForm(initial=initial_data)
             return render(request, 'app/user_profile.html', {'form': form})
     else:
         initial_data = prepareInitialData(request)
         form = ProfileEditForm(initial=initial_data)
         # redirect(Signup_teacher_r)
-    return render(request, 'app/user_profile.html', {'form': form})
+        return render(request, 'app/user_profile.html', {'form': form})
 
 
 class CustomerRegistrationView(View):
