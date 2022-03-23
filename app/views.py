@@ -5,14 +5,21 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 
 from blog.models import Blog
-from shop.models import Product, Customer, ShippingAddress
+from shop.models import Product, Customer, ShippingAddress, CATEGORY_CHOICES
 
 from .forms import CustomerRegistrationForm, ProfileEditForm
 
 
 def home(request):
     blogs = Blog.objects.all()
-    return render(request, 'app/index.html', {'blogs': blogs})
+    image_list = {}
+    for item in CATEGORY_CHOICES:
+        product = Product.objects.filter(category=item[0])
+        if len(product) != 0:
+            image_list[item[1]] = product[0].image1.url
+        else:
+            image_list[item[1]] = 'app/img/cat-1.jpg'
+    return render(request, 'app/index.html', {'blogs': blogs, 'img_list': image_list})
 
 
 def blog(request):
