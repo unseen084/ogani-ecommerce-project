@@ -190,7 +190,7 @@
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
-                                <button type="submit" class="site-btn">PLACE ORDER</button>
+                                <button href="#" type="submit" class="site-btn" id="make-payment">PLACE ORDER</button>
                             </div>
                         </div>
                     </div>
@@ -199,4 +199,12 @@
         </div>
     </section>
     <!-- Checkout Section End -->
-{% endblock %}
+<script type="text/javascript">
+    document.getElementById('make-payment').addEventListener('click',function(e){
+        submitFormData()
+    })
+    function submitFormData(){
+        console.log('Payment button clicked')
+    }
+</script>
+{% endblock content%}
