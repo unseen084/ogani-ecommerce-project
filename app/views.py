@@ -46,6 +46,7 @@ def prepareInitialData(request):
     }
     return initial_data
 
+
 def userprofile(request):
     if request.method=='POST':
         form = ProfileEditForm(request.POST or None)

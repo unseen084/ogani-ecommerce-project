@@ -190,7 +190,7 @@
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
-                                <button href="#" type="submit" class="site-btn" id="make-payment">PLACE ORDER</button>
+                                <button type="submit" class="site-btn" id="make-payment">PLACE ORDER</button>
                             </div>
                         </div>
                     </div>
@@ -200,11 +200,41 @@
     </section>
     <!-- Checkout Section End -->
 <script type="text/javascript">
+    var total = '{{ order.get_cart_total.1}}'
+
     document.getElementById('make-payment').addEventListener('click',function(e){
         submitFormData()
     })
     function submitFormData(){
         console.log('Payment button clicked')
+        var userFormData = {
+            'name':'{{ customer.name }}',
+            'email':'{{ customer.email }}',
+            'total':total,
+        }
+        var shippingInfo = {
+            'address': '{{ shipping_address.address }}',
+            'city':'{{ shipping_address.city }}',
+            'country': '{{ shipping_address.country }}',
+            'postal_code': '{{ shipping_address.postal_code }}',
+            'phone_number': '{{ shipping_address.phone_number }}',
+        }
+
+        var url = 'http://127.0.0.1:8000/shop/process_order/'
+        fetch(url,{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'X-CSRFToken':csrftoken,
+            },
+            body:JSON.stringify({'form':userFormData, 'shipping':shippingInfo})
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log('Success:',data);
+            alert('Transaction completed');
+            window.location.replace("{% url 'app:shop' %}");
+        })
     }
 </script>
-{% endblock content%}
+{% endblock %}
