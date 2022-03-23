@@ -18,7 +18,8 @@ def home(request):
         if len(product) != 0:
             image_list[item[1]] = product[0].image1.url
         else:
-            image_list[item[1]] = 'app/img/cat-1.jpg'
+            # default category image
+            image_list[item[1]] = 'static/app/img/categories/cat-1.jpg'
     return render(request, 'app/index.html', {'blogs': blogs, 'img_list': image_list})
 
 
