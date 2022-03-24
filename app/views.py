@@ -13,6 +13,8 @@ from .forms import CustomerRegistrationForm, ProfileEditForm
 def home(request):
     blogs = Blog.objects.all()
     image_list = {}
+
+    # category items
     for item in CATEGORY_CHOICES:
         product = Product.objects.filter(category=item[0])
         if len(product) != 0:
@@ -20,6 +22,8 @@ def home(request):
         else:
             # default category image
             image_list[item[1]] = 'static/app/img/categories/cat-1.jpg'
+
+    # show cart item count
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
@@ -28,7 +32,23 @@ def home(request):
         order = {'get_cart_total': (0, 70)}
         cartItems = 0
 
-    context = {'order': order, 'cartItems': cartItems, 'product': product, 'blogs': blogs, 'img_list': image_list}
+
+
+    # latest n items in 2D list
+    latest_products = Product.objects.all().order_by('-latest')[:9]
+    latest_N_Products = []
+    n_prod = []
+    for idx, prod in enumerate(latest_products):
+        n_prod.append({
+            'title': prod.title,
+            'image': prod.image1.url,
+            'price': prod.price,
+        })
+        if (idx+1) % 3 == 0:
+            latest_N_Products.append(n_prod)
+            n_prod = []
+
+    context = {'order': order, 'cartItems': cartItems, 'blogs': blogs, 'img_list': image_list, 'latest_N_Products': latest_N_Products}
     return render(request, 'app/index.html', context)
 
 
