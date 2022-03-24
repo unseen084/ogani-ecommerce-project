@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 
 from blog.models import Blog
-from shop.models import Product, Customer, ShippingAddress, CATEGORY_CHOICES
+from shop.models import Product, Customer, ShippingAddress, CATEGORY_CHOICES, Order
 
 from .forms import CustomerRegistrationForm, ProfileEditForm
 
@@ -20,21 +20,58 @@ def home(request):
         else:
             # default category image
             image_list[item[1]] = 'static/app/img/categories/cat-1.jpg'
-    return render(request, 'app/index.html', {'blogs': blogs, 'img_list': image_list})
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        cartItems = order.get_cart_items
+    else:
+        order = {'get_cart_total': (0, 70)}
+        cartItems = 0
+
+    context = {'order': order, 'cartItems': cartItems, 'product': product, 'blogs': blogs, 'img_list': image_list}
+    return render(request, 'app/index.html', context)
 
 
 def blog(request):
     blogs = Blog.objects.all()
-    return render(request, 'blog/blog.html', {'blogs': blogs})
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        cartItems = order.get_cart_items
+    else:
+        order = {'get_cart_total': (0, 70)}
+        cartItems = 0
+
+    context = {'order': order, 'cartItems': cartItems, 'blogs': blogs}
+
+    return render(request, 'blog/blog.html', context)
 
 
 def shop(request):
     products = Product.objects.all()
-    return render(request, 'shop/shop-grid.html', {'products': products})
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        cartItems = order.get_cart_items
+    else:
+        order = {'get_cart_total': (0, 70)}
+        cartItems = 0
+
+    context = {'order': order, 'cartItems': cartItems, 'products': products}
+
+    return render(request, 'shop/shop-grid.html', context)
 
 
 def contact(request):
-    return render(request, 'app/contact.html')
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        cartItems = order.get_cart_items
+    else:
+        cartItems = 0
+
+    context = {'cartItems': cartItems}
+    return render(request, 'app/contact.html', context)
 
 
 def prepareInitialData(request):

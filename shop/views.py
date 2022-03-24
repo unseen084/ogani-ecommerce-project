@@ -10,9 +10,19 @@ from shop.models import *
 
 
 def productinfo(request, product_id):
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        cartItems = order.get_cart_items
+    else:
+        order = {'get_cart_total': (0, 70)}
+        cartItems = 0
+
     product = get_object_or_404(Product, pk=product_id)
     products = Product.objects.filter(category=product.category).exclude(pk=product_id)
-    return render(request, 'shop/shop-details.html', {'product': product, 'products': products})
+
+    context = {'order': order, 'cartItems': cartItems, 'product': product, 'products': products}
+    return render(request, 'shop/shop-details.html', context)
 
 
 def cart(request):
@@ -35,14 +45,16 @@ def checkout(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
+        cartItems = order.get_cart_items
         shipping_address = ShippingAddress.objects.get(customer_id=customer.id, order_id=None)
 
     else:
         items = []
         order = {'get_cart_total': (0, 70)}
+        cartItems = 0
 
     context = {'items': items, 'order': order, 'shipping_address': shipping_address,
-               'customer': customer}
+               'customer': customer, 'cartItems': cartItems}
 
     return render(request, 'shop/checkout.html', context)
 
