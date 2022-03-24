@@ -91,7 +91,7 @@
                 {{ fm.label_tag }} {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>
             </div>
             {% endfor %}
-            <input type="submit" value="Submit" class="btn btn-primary">
+            <input type="submit" value="Update" class="btn btn-primary">
             <br>
             {% if form.non_field_errors %}
                 {% for error in form.non_field_errors %}
