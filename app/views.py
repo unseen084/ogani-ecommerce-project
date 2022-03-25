@@ -11,16 +11,6 @@ from .forms import CustomerRegistrationForm, ProfileEditForm
 
 def home(request):
     blogs = Blog.objects.all()
-    image_list = {}
-
-    # category items
-    for item in CATEGORY_CHOICES:
-        product = Product.objects.filter(category=item[0])
-        if len(product) != 0:
-            image_list[item[1]] = product[0].image1.url
-        else:
-            # default category image
-            image_list[item[1]] = 'static/app/img/categories/cat-1.jpg'
 
     # show cart item count
     if request.user.is_authenticated:
@@ -31,15 +21,14 @@ def home(request):
         order = {'get_cart_total': (0, 70)}
         cartItems = 0
 
+    # category items
+    image_list = get_category_items()
     # latest n items in 2D list
     latest_N_Products = get_N_latest_items()
-
     # Favourite n items in 2D list
     favourite_N_Products = get_N_favourite_items()
-
     # Featured n  items
     featured_N_products = get_N_featured_items()
-
     context = {'order': order, 'cartItems': cartItems, 'blogs': blogs, 'img_list': image_list, 'latest_N_Products': latest_N_Products, 'favourite_N_Products': favourite_N_Products, 'featured_N_products': featured_N_products,}
     return render(request, 'app/index.html', context)
 
@@ -211,3 +200,16 @@ def get_N_latest_items():
             latest_N_Products.append(n_prod)
             n_prod = []
     return latest_N_Products
+
+def get_category_items():
+    image_list = {}
+    for item in CATEGORY_CHOICES:
+        product = Product.objects.filter(category=item[0])
+        if len(product) != 0:
+            image_list[item[1]] = product[0].image1.url
+        else:
+            # default category image
+            image_list[item[1]] = 'static/app/img/categories/cat-1.jpg'
+    return image_list
+
+
