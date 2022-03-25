@@ -5,17 +5,9 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 
 from blog.models import Blog
-from shop.models import Product, Customer, ShippingAddress, CATEGORY_CHOICES, Order
+from shop.models import Product, Customer, ShippingAddress, CATEGORY_CHOICES, Order, FEATURED_CATEGORY_CHOICES
 
 from .forms import CustomerRegistrationForm, ProfileEditForm
-
-
-FEATURED_CATEGORY_CHOICES = (
-    ('FM', 'Fresh-Meat'),
-    ('V', 'Vegetables'),
-    ('F&N', 'Fruit-Nut-Gifts'),
-    ('OF', 'Ocean-Foods'),
-)
 
 def home(request):
     blogs = Blog.objects.all()
@@ -39,49 +31,14 @@ def home(request):
         order = {'get_cart_total': (0, 70)}
         cartItems = 0
 
-
-
     # latest n items in 2D list
-    latest_products = Product.objects.all().order_by('-latest')[:9]
-    latest_N_Products = []
-    n_prod = []
-    for idx, prod in enumerate(latest_products):
-        n_prod.append({
-            'title': prod.title,
-            'image': prod.image1.url,
-            'price': prod.price,
-        })
-        if (idx+1) % 3 == 0:
-            latest_N_Products.append(n_prod)
-            n_prod = []
+    latest_N_Products = get_N_latest_items()
 
     # Favourite n items in 2D list
-    favourite_products = Product.objects.all().order_by('-fav_count')[:9]
-    favourite_N_Products = []
-    n_prod = []
-    for idx, prod in enumerate(favourite_products):
-        n_prod.append({
-            'title': prod.title,
-            'image': prod.image1.url,
-            'price': prod.price,
-        })
-        if (idx + 1) % 3 == 0:
-            favourite_N_Products.append(n_prod)
-            n_prod = []
-
+    favourite_N_Products = get_N_favourite_items()
 
     # Featured n  items
-    featured_N_products = []
-    for item in FEATURED_CATEGORY_CHOICES:
-        products = Product.objects.filter(category=item[0])
-        if len(products) != 0:
-            for product in products:
-                featured_N_products.append({
-                    'title': product.title,
-                    'image': product.image1.url,
-                    'price': product.price,
-                    'category': item[1]
-                })
+    featured_N_products = get_N_featured_items()
 
     context = {'order': order, 'cartItems': cartItems, 'blogs': blogs, 'img_list': image_list, 'latest_N_Products': latest_N_Products, 'favourite_N_Products': favourite_N_Products, 'featured_N_products': featured_N_products,}
     return render(request, 'app/index.html', context)
@@ -208,3 +165,49 @@ class CustomerRegistrationView(View):
             login(request, obj)
             return redirect('app:home')
         return render(request, 'app/signup.html', {'form': form})
+
+# Helper functions
+
+def get_N_featured_items():
+    featured_N_products = []
+    for item in FEATURED_CATEGORY_CHOICES:
+        products = Product.objects.filter(category=item[0])
+        if len(products) != 0:
+            for product in products:
+                featured_N_products.append({
+                    'title': product.title,
+                    'image': product.image1.url,
+                    'price': product.price,
+                    'category': item[1]
+                })
+    return featured_N_products
+
+def get_N_favourite_items():
+    favourite_products = Product.objects.all().order_by('-fav_count')[:9]
+    favourite_N_Products = []
+    n_prod = []
+    for idx, prod in enumerate(favourite_products):
+        n_prod.append({
+            'title': prod.title,
+            'image': prod.image1.url,
+            'price': prod.price,
+        })
+        if (idx + 1) % 3 == 0:
+            favourite_N_Products.append(n_prod)
+            n_prod = []
+    return favourite_N_Products
+
+def get_N_latest_items():
+    latest_products = Product.objects.all().order_by('-latest')[:9]
+    latest_N_Products = []
+    n_prod = []
+    for idx, prod in enumerate(latest_products):
+        n_prod.append({
+            'title': prod.title,
+            'image': prod.image1.url,
+            'price': prod.price,
+        })
+        if (idx + 1) % 3 == 0:
+            latest_N_Products.append(n_prod)
+            n_prod = []
+    return latest_N_Products
