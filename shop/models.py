@@ -16,6 +16,13 @@ CATEGORY_CHOICES = (
     ('B', 'Fresh Bananas'),
 )
 
+FEATURED_CATEGORY_CHOICES = (
+    ('FM', 'Fresh-Meat'),
+    ('V', 'Vegetables'),
+    ('F&N', 'Fruit-Nut-Gifts'),
+    ('OF', 'Ocean-Foods'),
+)
+
 
 class Product(models.Model):
     title = models.CharField(max_length=200)
