@@ -1,12 +1,14 @@
 import datetime
 import json
 
+from django.core.mail.backends import console
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
 from shop.models import *
+from .utils import *
 
 
 def productinfo(request, product_id):
@@ -26,32 +28,24 @@ def productinfo(request, product_id):
 
 
 def cart(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-    else:
-        items = []
-        order = {'get_cart_total': (0, 70)}
-        cartItems = 0
+
+    data = cartData(request)
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
 
     context = {'items': items, 'order': order, 'cartItems': cartItems}
     return render(request, 'shop/shopping-cart.html', context)
 
 
 def checkout(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-        shipping_address = ShippingAddress.objects.get(customer_id=customer.id, order_id=None)
 
-    else:
-        items = []
-        order = {'get_cart_total': (0, 70)}
-        cartItems = 0
+    data = cartData(request, in_check_out=True)
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
+    customer = data['customer']
+    shipping_address = data['shipping_address']
 
     context = {'items': items, 'order': order, 'shipping_address': shipping_address,
                'customer': customer, 'cartItems': cartItems}

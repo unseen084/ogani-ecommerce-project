@@ -6,20 +6,18 @@ from django.contrib.auth.models import User
 
 from blog.models import Blog
 from shop.models import Product, Customer, ShippingAddress, CATEGORY_CHOICES, Order, FEATURED_CATEGORY_CHOICES
+from shop.utils import *
 
 from .forms import CustomerRegistrationForm, ProfileEditForm
+
 
 def home(request):
     blogs = Blog.objects.all()
 
     # show cart item count
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        cartItems = order.get_cart_items
-    else:
-        order = {'get_cart_total': (0, 70)}
-        cartItems = 0
+    data = cartData(request)
+    cartItems = data['cartItems']
+    order = data['order']
 
     # category items
     image_list = get_category_items()
@@ -29,7 +27,11 @@ def home(request):
     favourite_N_Products = get_N_favourite_items()
     # Featured n  items
     featured_N_products = get_N_featured_items()
-    context = {'order': order, 'cartItems': cartItems, 'blogs': blogs, 'img_list': image_list, 'latest_N_Products': latest_N_Products, 'favourite_N_Products': favourite_N_Products, 'featured_N_products': featured_N_products,}
+    context = {'order': order, 'cartItems': cartItems,
+               'blogs': blogs, 'img_list': image_list,
+               'latest_N_Products': latest_N_Products,
+               'favourite_N_Products': favourite_N_Products,
+               'featured_N_products': featured_N_products}
     return render(request, 'app/index.html', context)
 
 
@@ -50,13 +52,10 @@ def blog(request):
 
 def shop(request):
     products = Product.objects.all()
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        cartItems = order.get_cart_items
-    else:
-        order = {'get_cart_total': (0, 70)}
-        cartItems = 0
+
+    data = cartData(request)
+    cartItems = data['cartItems']
+    order = data['order']
 
     context = {'order': order, 'cartItems': cartItems, 'products': products}
 
