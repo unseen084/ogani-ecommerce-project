@@ -10,6 +10,13 @@ from shop.models import Product, Customer, ShippingAddress, CATEGORY_CHOICES, Or
 from .forms import CustomerRegistrationForm, ProfileEditForm
 
 
+FEATURED_CATEGORY_CHOICES = (
+    ('FM', 'Fresh-Meat'),
+    ('V', 'Vegetables'),
+    ('F&N', 'Fruit-Nut-Gifts'),
+    ('OF', 'Ocean-Foods'),
+)
+
 def home(request):
     blogs = Blog.objects.all()
     image_list = {}
@@ -62,7 +69,21 @@ def home(request):
             favourite_N_Products.append(n_prod)
             n_prod = []
 
-    context = {'order': order, 'cartItems': cartItems, 'blogs': blogs, 'img_list': image_list, 'latest_N_Products': latest_N_Products, 'favourite_N_Products': favourite_N_Products}
+
+    # Featured n  items
+    featured_N_products = []
+    for item in FEATURED_CATEGORY_CHOICES:
+        products = Product.objects.filter(category=item[0])
+        if len(products) != 0:
+            for product in products:
+                featured_N_products.append({
+                    'title': product.title,
+                    'image': product.image1.url,
+                    'price': product.price,
+                    'category': item[1]
+                })
+
+    context = {'order': order, 'cartItems': cartItems, 'blogs': blogs, 'img_list': image_list, 'latest_N_Products': latest_N_Products, 'favourite_N_Products': favourite_N_Products, 'featured_N_products': featured_N_products,}
     return render(request, 'app/index.html', context)
 
 
