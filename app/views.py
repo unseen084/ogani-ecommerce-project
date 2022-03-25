@@ -48,7 +48,21 @@ def home(request):
             latest_N_Products.append(n_prod)
             n_prod = []
 
-    context = {'order': order, 'cartItems': cartItems, 'blogs': blogs, 'img_list': image_list, 'latest_N_Products': latest_N_Products}
+    # Favourite n items in 2D list
+    favourite_products = Product.objects.all().order_by('-fav_count')[:9]
+    favourite_N_Products = []
+    n_prod = []
+    for idx, prod in enumerate(favourite_products):
+        n_prod.append({
+            'title': prod.title,
+            'image': prod.image1.url,
+            'price': prod.price,
+        })
+        if (idx + 1) % 3 == 0:
+            favourite_N_Products.append(n_prod)
+            n_prod = []
+
+    context = {'order': order, 'cartItems': cartItems, 'blogs': blogs, 'img_list': image_list, 'latest_N_Products': latest_N_Products, 'favourite_N_Products': favourite_N_Products}
     return render(request, 'app/index.html', context)
 
 
