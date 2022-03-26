@@ -53,10 +53,7 @@ def cartData(request, in_check_out=False):
     else:
         print('user not auth\'ed')
         shipping_address = []
-        customer = {
-            'name': 'Anonymous',
-            'email': 'none@gmail.com',
-        }
+        customer = []
         cookieData = cookieCart(request)
         cartItems = cookieData['cartItems']
         order = cookieData['order']

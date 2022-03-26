@@ -90,18 +90,8 @@ def process_order(request):
             order.complete = True
         order.save()
 
-        # ship
-        # ShippingAddress.objects.create(
-        #     customer=customer,
-        #     order=order,
-        #     address=data['shipping']['address'],
-        #     city=data['shipping']['city'],
-        #     country=data['shipping']['country'],
-        #     postal_code=data['shipping']['postal_code'],
-        #     phone_number=data['shipping']['phone_number'],
-        # )
-
     else:
         print('user not logged in')
-    print('data: ', request.body)
+
+
     return JsonResponse('payment complete', safe=False)
