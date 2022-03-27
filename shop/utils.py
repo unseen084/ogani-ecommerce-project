@@ -1,8 +1,11 @@
 import json
+
+import shop
 from shop.models import *
 
 
 def cookieCart(request):
+    print('CookieCart...')
     try:
         cart = json.loads(request.COOKIES['cart'])
     except:
@@ -34,11 +37,11 @@ def cookieCart(request):
                 'get_total': total
             }
             items.append(item)
-        except:
-            pass
+        except Exception as e:
+            print('err: ', e)
     tupleval2 = order['get_cart_total'][1] + tupleval1
     order['get_cart_total'] = (tupleval1, tupleval2)
-
+    print('CookieCart end!')
     return {'items': items, 'order': order, 'cartItems': cartItems}
 
 
@@ -51,7 +54,7 @@ def cartData(request, in_check_out=False):
         shipping_address = ShippingAddress.objects.get(customer_id=customer.id, order_id=None)
 
     else:
-        print('user not auth\'ed')
+        print('user not auth\'ed -> CartData')
         shipping_address = []
         customer = []
         cookieData = cookieCart(request)
@@ -63,3 +66,45 @@ def cartData(request, in_check_out=False):
         context['shipping_address'] = shipping_address
         context['customer'] = customer
     return context
+
+
+def guestOrder(request, data):
+    print('guest order start...')
+    name = data['form']['name']
+    email = data['form']['email']
+
+    cookieData = cookieCart(request)
+    items = cookieData['items']
+
+    try:
+        customer = Customer.objects.filter(email=email)[0]
+    except Exception as e:
+        print('customer error: ', e)
+        customer = Customer.objects.create(
+            email=email,
+            name=name
+        )
+        customer.save()
+
+    order = Order.objects.create(
+        customer=customer,
+        complete=False,
+    )
+    for item in items:
+        product = Product.objects.get(id=item['product']['id'])
+        orderItem = OrderItem.objects.create(
+            product=product,
+            order=order,
+            quantity=item['quantity']
+        )
+    ShippingAddress.objects.create(
+        customer=customer,
+        order=order,
+        address=data['shipping']['address'],
+        city=data['shipping']['city'],
+        country=data['shipping']['country'],
+        postal_code=data['shipping']['postal_code'],
+        phone_number=data['shipping']['phone_number']
+    )
+    print('guest order end...')
+    return customer, order

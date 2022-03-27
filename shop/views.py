@@ -8,6 +8,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
 from shop.models import *
+from . import utils
 from .utils import *
 
 
@@ -39,14 +40,13 @@ def cart(request):
 
 
 def checkout(request):
-
+    print('Checkout...')
     data = cartData(request, in_check_out=True)
     cartItems = data['cartItems']
     order = data['order']
     items = data['items']
     customer = data['customer']
     shipping_address = data['shipping_address']
-
     context = {'items': items, 'order': order, 'shipping_address': shipping_address,
                'customer': customer, 'cartItems': cartItems}
 
@@ -78,20 +78,24 @@ def updateitem(request):
 
 
 def process_order(request):
+    print('process order start...')
     transaction_id = datetime.datetime.now().timestamp()
     data = json.loads(request.body)
+    print('Data: ', data)
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        total = float(data['form']['total'])
-        order.transaction_id = transaction_id
-
-        if total == order.get_cart_total[1]:
-            order.complete = True
-        order.save()
 
     else:
         print('user not logged in')
+        customer, order = guestOrder(request, data)
+        print('Customer: ',customer,' order: ', order)
 
+    total = float(data['form']['total'])
+    order.transaction_id = transaction_id
 
+    if total == order.get_cart_total[1]:
+        order.complete = True
+    order.save()
+    print('process order end...')
     return JsonResponse('payment complete', safe=False)

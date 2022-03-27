@@ -80,8 +80,8 @@
         <div class="container">
             <div class="checkout__form">
                 <h4>Billing Details</h4>
-                <form action="" id="form">
-
+                <form action="" id="form" method="post" onsubmit="return false">
+                    {% csrf_token %}
                     <div class="row">
                         <div class="col-lg-8 col-md-6">
                             <div class="row">
@@ -201,7 +201,7 @@
         })
         .then((response) => response.json())
         .then((data) => {
-            console.log('Success:',data);
+            console.log('Success: ',data);
             alert('Transaction completed');
 
             cart = {}
@@ -210,6 +210,7 @@
 
             window.location.replace("{% url 'app:shop' %}");
         })
+        .catch(err => console.log(err));
     }
 </script>
 {% endblock %}
