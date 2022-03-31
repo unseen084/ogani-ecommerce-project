@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 
 from blog.models import Blog
-from shop.models import Product, Customer, ShippingAddress, CATEGORY_CHOICES, Order, FEATURED_CATEGORY_CHOICES
+from shop.models import Product, Customer, ShippingAddress, CATEGORY_CHOICES, Order, FEATURED_CATEGORY_CHOICES, CATEGORY_CHOICES_MAP
 from shop.utils import *
 
 from .forms import CustomerRegistrationForm, ProfileEditForm
@@ -34,6 +34,10 @@ def home(request):
                'featured_N_products': featured_N_products}
     return render(request, 'app/index.html', context)
 
+
+def category(request, type):
+    products = Product.objects.filter(category=CATEGORY_CHOICES_MAP[type])
+    return render(request, 'app/searched-category.html', {'products': products})
 
 def blog(request):
     blogs = Blog.objects.all()

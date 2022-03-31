@@ -18,4 +18,5 @@ urlpatterns = [
                                                          authentication_form=LoginForm), name='loginuser'),
     path('logout/', auth_views.LogoutView.as_view(next_page='app:loginuser'), name='logoutuser'),
     path('profile/', views.userprofile, name='userprofile'),
+    path('category/<str:type>/', views.category, name='category'),
 ]

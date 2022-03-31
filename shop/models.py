@@ -23,6 +23,19 @@ FEATURED_CATEGORY_CHOICES = (
     ('OF', 'Ocean-Foods'),
 )
 
+CATEGORY_CHOICES_MAP = {
+    'Fresh_Meat': 'FM',
+    'Vegetables': 'V',
+    'Fruit_Nut_Gifts': 'F&N',
+    'Fresh_Berries': 'FB',
+    'Ocean_Foods': 'OF',
+    'Butter_Eggs': 'B&E',
+    'Fastfood': 'FF',
+    'Fresh_Onion': 'FO',
+    'Papayaya_Crisps': 'P%C',
+    'Oatmeal': 'OM',
+    'Fresh_Bananas': 'B',
+}
 
 class Product(models.Model):
     title = models.CharField(max_length=200)
