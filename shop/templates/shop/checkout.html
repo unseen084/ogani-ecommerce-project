@@ -156,7 +156,7 @@
     <!-- Checkout Section End -->
 
 
-<script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AfrQeaZyO3e4z3NciJeS718CwY-TT6aRAGoiRLQnzUWyqk5lsB3OblFoRAfxgR9yIJ00Ib9RTKjL1zfi&currency=USD&disable-funding=credit"></script>
 
 <script type="text/javascript">
     var total = '{{ order.get_cart_total.1}}'
@@ -166,7 +166,7 @@
 
 
     document.getElementById('make-payment').addEventListener('click',function(e){
-<!--        submitFormData()-->
+
         console.log('clicked')
         document.getElementById('make-payment').style.visibility='hidden'
         // Render the PayPal button into #paypal-button-container
@@ -177,7 +177,7 @@
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
-                            value: '88.44'
+                            value: parseFloat(total).toFixed(2)
                         }
                     }]
                 });
@@ -188,9 +188,7 @@
                 return actions.order.capture().then(function(orderData) {
                     // Successful capture! For demo purposes:
                     console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-                    var transaction = orderData.purchase_units[0].payments.captures[0];
-                    alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
-
+                    submitFormData()
                     // Replace the above to show a success message within this page, e.g.
                     // const element = document.getElementById('paypal-button-container');
                     // element.innerHTML = '';
