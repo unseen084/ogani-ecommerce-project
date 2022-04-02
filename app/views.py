@@ -1,4 +1,5 @@
-from django.http import HttpResponse
+from django.db.models import Q
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import login, logout, authenticate
@@ -215,4 +216,11 @@ def get_category_items():
             image_list[item[1]] = 'static/app/img/categories/cat-1.jpg'
     return image_list
 
+
+def search(request):
+    print('Search...')
+    query = request.GET['query']
+    print(query)
+    products = Product.objects.filter(Q(title__icontains=query))
+    return render(request, 'app/searched-category.html', {'products': products})
 
