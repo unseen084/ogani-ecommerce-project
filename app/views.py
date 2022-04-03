@@ -38,7 +38,9 @@ def home(request):
 
 def category(request, type):
     products = Product.objects.filter(category=CATEGORY_CHOICES_MAP[type])
-    return render(request, 'app/searched-category.html', {'products': products})
+    # latest n items in 2D list
+    latest_N_Products = get_N_latest_items()
+    return render(request, 'app/searched-category.html', {'products': products, 'latest_N_Products': latest_N_Products})
 
 def blog(request):
     blogs = Blog.objects.all()
@@ -61,8 +63,10 @@ def shop(request):
     data = cartData(request)
     cartItems = data['cartItems']
     order = data['order']
+    # latest n items in 2D list
+    latest_N_Products = get_N_latest_items()
 
-    context = {'order': order, 'cartItems': cartItems, 'products': products}
+    context = {'order': order, 'cartItems': cartItems, 'products': products, 'latest_N_Products': latest_N_Products}
 
     return render(request, 'shop/shop-grid.html', context)
 
@@ -222,5 +226,7 @@ def search(request):
     query = request.GET['query']
     print(query)
     products = Product.objects.filter(Q(title__icontains=query))
-    return render(request, 'app/searched-category.html', {'products': products})
+    # latest n items in 2D list
+    latest_N_Products = get_N_latest_items()
+    return render(request, 'app/searched-category.html', {'products': products, 'latest_N_Products': latest_N_Products})
 
