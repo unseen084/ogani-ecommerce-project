@@ -108,12 +108,11 @@
                             <div class="featured__item__pic set-bg" data-setbg="{{ item.image }}">
                                 <ul class="featured__item__pic__hover">
                                     <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
                                     <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
                                 </ul>
                             </div>
                             <div class="featured__item__text">
-                                <h6><a href="#">{{ item.title }}</a></h6>
+                                <h6><a href="{% url 'shop:productinfo' item.product_id %}">{{ item.title }}</a></h6>
                                 <h5>{{ item.price }}BDT</h5>
                             </div>
                         </div>
@@ -155,7 +154,7 @@
 
                                 <div class="latest-prdouct__slider__item">
                                     {% for item in chunk %}
-                                        <a href="#" class="latest-product__item">
+                                        <a href="{% url 'shop:productinfo' item.product_id %}" class="latest-product__item">
                                             <div class="latest-product__item__pic">
                                                 <img src="{{ item.image }}" alt="">
                                             </div>
@@ -178,7 +177,7 @@
                             {% for chunk in favourite_N_Products %}
                                 <div class="latest-prdouct__slider__item">
                                     {% for item in chunk %}
-                                        <a href="#" class="latest-product__item">
+                                        <a href="{% url 'shop:productinfo' item.product_id %}" class="latest-product__item">
                                             <div class="latest-product__item__pic">
                                                 <img src="{{ item.image }}" alt="">
                                             </div>

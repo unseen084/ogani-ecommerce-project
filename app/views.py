@@ -165,6 +165,7 @@ class CustomerRegistrationView(View):
 
 # Helper functions
 
+
 def get_N_featured_items():
     featured_N_products = []
     for item in FEATURED_CATEGORY_CHOICES:
@@ -175,9 +176,11 @@ def get_N_featured_items():
                     'title': product.title,
                     'image': product.image1.url,
                     'price': product.price,
-                    'category': item[1]
+                    'category': item[1],
+                    'product_id': product.id,
                 })
     return featured_N_products
+
 
 def get_N_favourite_items():
     favourite_products = Product.objects.all().order_by('-fav_count')[:9]
@@ -188,11 +191,13 @@ def get_N_favourite_items():
             'title': prod.title,
             'image': prod.image1.url,
             'price': prod.price,
+            'product_id': prod.id,
         })
         if (idx + 1) % 3 == 0:
             favourite_N_Products.append(n_prod)
             n_prod = []
     return favourite_N_Products
+
 
 def get_N_latest_items():
     latest_products = Product.objects.all().order_by('-latest')[:9]
@@ -203,11 +208,13 @@ def get_N_latest_items():
             'title': prod.title,
             'image': prod.image1.url,
             'price': prod.price,
+            'product_id': prod.id,
         })
         if (idx + 1) % 3 == 0:
             latest_N_Products.append(n_prod)
             n_prod = []
     return latest_N_Products
+
 
 def get_category_items():
     image_list = {}
