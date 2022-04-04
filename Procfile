@@ -1,0 +1,1 @@
+web: gunicorn django_ogani_ecommerce.wsgi --log--file -
