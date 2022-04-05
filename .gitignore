@@ -10,7 +10,6 @@
 .idea/vcs.xml
 
 #media file
-media/*
+
 
 #temporary db exclude
-db.sqlite3
